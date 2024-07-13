@@ -1,5 +1,5 @@
-from collections import defaultdict
 import datetime
+from collections import defaultdict
 
 
 class IsDate:
@@ -116,11 +116,6 @@ class DateFormat:
                 defaultdict(
                     str,
                     field_name=field_name,
-                    target_date=self.target_date,
                     value=value,
                 )
             )
-
-
-if __name__ == "__main__":
-    print(DateEquals(datetime.date).validate("2024-06-11", "date"))

@@ -1,5 +1,4 @@
 from collections import defaultdict
-import re
 
 
 class Length:
@@ -14,12 +13,12 @@ class Length:
 
     def __init__(
         self,
-        min_length: int,
-        max_length: int,
+        min: int,
+        max: int,
         message="{field_name} length should be between {min} and {max}",
     ):
-        self.min_length = min_length
-        self.max_length = max_length
+        self.min_length = min
+        self.max_length = max
         self.message = message
 
     def validate(self, value: str, field_name: str):
@@ -333,7 +332,7 @@ class EndWith:
 
     def __init__(
         self,
-        list_tail: list[str],
+        list_tail: tuple[str],
         message="{field_name} should end with one of {list_tail}",
     ):
         self.list_tail = list_tail

@@ -30,6 +30,8 @@ class AllowedFile:
         """
 
         # if not set file then return none. If want to be required, then add rules NotBlank()
+        if file_name is None:
+            return None
         if file_name.strip() == "":
             return None
 

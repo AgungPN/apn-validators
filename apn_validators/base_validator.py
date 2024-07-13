@@ -1,4 +1,4 @@
-def err_to_list(errors: dict[list]):
+def err_to_list(errors: dict) -> list:
     """
     Convert a dictionary of error messages to a single list of error messages.
 
@@ -30,10 +30,10 @@ def err_to_list(errors: dict[list]):
 
 def validate(schema: dict, values: dict, is_err_to_list=False):
     """
-    Validate the provided values against the specified validation scheme.
+    Validate the provided values against the specified validation schema.
 
     Parameters:
-        scheme (dict): A dictionary where keys are field names and values are lists of validation rule objects.
+        schema (dict): A dictionary where keys are field names and values are lists of validation rule objects.
         values (dict): A dictionary where keys are field names and values are the values to be validated.
 
     Returns:
@@ -42,7 +42,7 @@ def validate(schema: dict, values: dict, is_err_to_list=False):
             - errors (dict): A dictionary where keys are field names and values are lists of error messages for each field.
 
     Example:
-        scheme = {
+        schema = {
             'username': [NotBlank(), Length(min=3, max=20)],
             'password': [NotBlank(), Password()],
             'email': [Email()],
@@ -52,7 +52,7 @@ def validate(schema: dict, values: dict, is_err_to_list=False):
             'password': 's3cr3t!',
             'email': 'agung@example.com',
         }
-        validated, err = validate(scheme, values)
+        validated, err = validate(schema, values)
 
         if err:
             print("Validation errors:", err)
