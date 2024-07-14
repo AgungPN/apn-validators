@@ -3,19 +3,20 @@ from collections import defaultdict
 
 
 class Numeric:
-    """check is the string only a numeric value"""
+    """check if the value is a number"""
 
     def __init__(self, message="{field_name} only accept numbers") -> None:
         self.message = message
 
     def validate(self, value, field_name):
-        return (
-            self.message.format_map(
+        if not (
+            isinstance(value, int)
+            or isinstance(value, float)
+            or re.match(r"^\d+$", value)
+        ):
+            return self.message.format_map(
                 defaultdict(str, field_name=field_name, value=value)
             )
-            if not re.match(r"^\d+$", value)
-            else None
-        )
 
 
 class GreaterThenOrEqual:
@@ -211,9 +212,45 @@ Lt = LessThen
 """Alias for less than class"""
 
 
-class Range:
+class NumberRange:
     """
-    Validator to check if a value is numeric and contains the specified number of decimal places.
+    Validate to check if a value is has number between min and max
+
+    Attributes:
+        min (int): The minimum number allowed.
+        max (int): The maximum number allowed.
+        message (str): The error message to be used if the validation fails.
+    """
+
+    def __init__(
+        self,
+        min,
+        max,
+        message="The number {field_name} should range from {min} to {max}",
+    ):
+        self.min = min
+        self.max = max
+        self.message = message
+
+    def validate(self, value, field_name):
+        """
+        Validate if the given value is numeric and contains the specified number of decimal places.
+        """
+        if value is None:
+            return None
+        error_message = self.message.format_map(
+                defaultdict(str, field_name=field_name, min=self.min, max=self.max,value=value)
+            )
+        try:
+            value = int(value)
+            if value < self.min or value > self.max:
+                return error_message
+        except ValueError:
+            return error_message
+
+class DecimalRange:
+    """
+    Validate to check if a value is has decimal between min and max
 
     Attributes:
         min (int): The minimum number of decimal places allowed.
@@ -225,7 +262,7 @@ class Range:
         self,
         min,
         max,
-        message="{field_name} should range from {min} to {max}",
+        message="The decimal {field_name} should range from {min} to {max}",
     ):
         self.min = min
         self.max = max
@@ -245,6 +282,7 @@ class Range:
         if value is None:
             return None
 
+        value = str(value)
         pattern = r"^-?\d+(\.\d{{{min},{max}}})?$".format(min=self.min, max=self.max)
         if not re.match(pattern, value):
             return self.message.format_map(

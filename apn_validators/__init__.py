@@ -63,6 +63,7 @@ def validate(schema: dict, values: dict, is_err_to_list=False):
     validated = {}
 
     for field_name, rules in schema.items():
+        print(field_name.split("."))
         value = values.get(field_name)
         validated[field_name] = value
 
