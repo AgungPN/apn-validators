@@ -1,5 +1,5 @@
-from collections import defaultdict
 import re
+from collections import defaultdict
 
 
 class MatchRegex:
@@ -82,8 +82,6 @@ class Password:
         numbers (bool, optional): Whether the password must contain numeric digits (default: True).
         symbols (bool, optional): Whether the password must contain symbols (default: True).
         length (int, optional): The minimum length of the password (default: 8).
-        value (str, optional): The value to validate. If None, it will be retrieved from the data by the setter before validation (default: None).
-        field_name (str, optional): The name of the field being validated. If None, it will be retrieved from the data by the setter before validation (default: None).
     """
 
     def __init__(
@@ -93,31 +91,48 @@ class Password:
         numbers: bool = True,
         symbols: bool = True,
         length: int = 8,
+        messages: dict[str, str] = {
+            "base_message": "{field_name} field must include at least {messages}",
+            "uppercase": "one uppercase letter",
+            "lowercase": "one lowercase letter",
+            "numbers": "one digit",
+            "symbols": "one symbol",
+            "length": "be at least {length} characters",
+        },
     ) -> None:
         self.uppercase = uppercase
         self.lowercase = lowercase
         self.numbers = numbers
         self.symbols = symbols
         self.length = length
+        self.messages = messages
 
     def __build_patter_password(self):
         pattern = "^"
         problem_message = []
         if self.uppercase:
             pattern += "(?=.*?[A-Z])"
-            problem_message.append("one uppercase letter")
+            problem_message.append(
+                self.messages.get("uppercase", "one uppercase letter")
+            )
         if self.lowercase:
             pattern += "(?=.*?[a-z])"
-            problem_message.append("one lowercase letter")
+            problem_message.append(
+                self.messages.get("lowercase", "one lowercase letter")
+            )
         if self.numbers:
             pattern += "(?=.*?[0-9])"
-            problem_message.append("one digit")
+            problem_message.append(self.messages.get("numbers", "one digit"))
         if self.symbols:
             pattern += "(?=.*?[#?!@_$%^&*-])"
-            problem_message.append("one symbol")
+            problem_message.append(self.messages.get("symbols", "one symbol"))
         if self.length is not None:
             pattern = pattern + ".{" + str(self.length) + ",}"
-            problem_message.append("be at least {} characters".format(self.length))
+            problem_message.append(
+                self.messages.get(
+                    "length", "be at lease {length} characters"
+                ).format_map(defaultdict(str, length=self.length))
+            )
 
         pattern += "$"
         return pattern, problem_message
@@ -128,8 +143,10 @@ class Password:
 
         if not re.match(r"{}".format(pattern), value):
             problem_message = ", ".join(problem_message)
-            return "{} field must include at least {}".format(
-                field_name, problem_message
+            return self.messages.get(
+                "base_message", "{field_name} field must include at least {messages}"
+            ).format_map(
+                defaultdict(str, field_name=field_name, messages=problem_message)
             )
         return None
 

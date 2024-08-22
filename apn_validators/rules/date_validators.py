@@ -11,7 +11,7 @@ class IsDate:
     def validate(self, str_format: str, value, field_name):
         try:
             datetime.datetime.strptime(value, str_format)
-        except:
+        except Exception:
             return self.message.format_map(
                 defaultdict(str, field_name=field_name, str_format=str_format)
             )
