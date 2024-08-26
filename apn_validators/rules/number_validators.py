@@ -9,11 +9,10 @@ class Numeric:
         self.message = message
 
     def validate(self, value, field_name):
-        if not (
-            isinstance(value, int)
-            or isinstance(value, float)
-            or re.match(r"^\d+$", value)
-        ):
+        try:
+            float(value)
+            return None
+        except ValueError:
             return self.message.format_map(
                 defaultdict(str, field_name=field_name, value=value)
             )
@@ -24,44 +23,44 @@ class GreaterThenOrEqual:
     Validator to check if a value is greater than or equal a specified threshold.
 
     Attributes:
-        threshold (int): The threshold value that the input value must exceed.
+        threshold (float): The threshold value that the input value must exceed.
         message (str): The error message to be used if the validation fails.
     """
 
     def __init__(
         self,
-        threshold: int,
-        message="field {field_name} should be greater then or equal {threshold}",
+        threshold: float,
+        message="field {field_name} should be number and greater then or equal to {threshold}",
     ):
         self.threshold = threshold
         self.message = message
 
-    def validate(self, value: int, field_name: str):
+    def validate(self, value: float, field_name: str):
         """
         Validate if the given value is greater than the threshold.
 
         Parameters:
-            value (str or int): The value to validate.
+            value (str or float): The value to validate.
             field_name (str): The name of the field being validated.
 
         Returns:
             str or None: The error message if validation fails, None otherwise.
         """
-        try:
-            value = int(value)
-            if value < self.threshold:
-                return self.message.format_map(
-                    defaultdict(
-                        str,
-                        field_name=field_name,
-                        value=value,
-                        threshold=self.threshold,
-                    )
-                )
-        except ValueError:
-            return "field {} should be number and greater then or equal {}".format(
-                field_name, self.threshold
+
+        error_message = self.message.format_map(
+            defaultdict(
+                str,
+                field_name=field_name,
+                value=value,
+                threshold=self.threshold,
             )
+        )
+        try:
+            value = float(value)
+            if value < self.threshold:
+                return error_message
+        except ValueError:
+            return error_message
 
 
 class GreaterThen:
@@ -69,44 +68,43 @@ class GreaterThen:
     Validator to check if a value is greater than a specified threshold.
 
     Attributes:
-        threshold (int): The threshold value that the input value must exceed.
+        threshold (float): The threshold value that the input value must exceed.
         message (str): The error message to be used if the validation fails.
     """
 
     def __init__(
         self,
-        threshold: int,
-        message="field {field_name} should be greater then {threshold}",
+        threshold: float,
+        message="field {field_name} should be number and greater then {threshold}",
     ):
         self.threshold = threshold
         self.message = message
 
-    def validate(self, value: int, field_name: str):
+    def validate(self, value: float, field_name: str):
         """
         Validate if the given value is greater than the threshold.
 
         Parameters:
-            value (str or int): The value to validate.
+            value (str or float): The value to validate.
             field_name (str): The name of the field being validated.
 
         Returns:
             str or None: The error message if validation fails, None otherwise.
         """
-        try:
-            value = int(value)
-            if value <= self.threshold:
-                return self.message.format_map(
-                    defaultdict(
-                        str,
-                        field_name=field_name,
-                        value=value,
-                        threshold=self.threshold,
-                    )
-                )
-        except ValueError:
-            return "field {} should be number and greater then {}".format(
-                field_name, self.threshold
+        error_message = self.message.format_map(
+            defaultdict(
+                str,
+                field_name=field_name,
+                value=value,
+                threshold=self.threshold,
             )
+        )
+        try:
+            value = float(value)
+            if value <= self.threshold:
+                return error_message
+        except ValueError:
+            return error_message
 
 
 class LessThenOrEqual:
@@ -114,44 +112,43 @@ class LessThenOrEqual:
     Validator to check if a value is less than or equal a specified threshold.
 
     Attributes:
-        threshold (int): The threshold value that the input value must exceed.
+        threshold (float): The threshold value that the input value must exceed.
         message (str): The error message to be used if the validation fails.
     """
 
     def __init__(
         self,
-        threshold: int,
-        message="field {field_name} should be less then or equal {threshold}",
+        threshold: float,
+        message="field {field_name} should be number and less then or equal to {threshold}",
     ):
         self.threshold = threshold
         self.message = message
 
-    def validate(self, value: int, field_name: str):
+    def validate(self, value: float, field_name: str):
         """
         Validate if the given value is less than the threshold.
 
         Parameters:
-            value (str or int): The value to validate.
+            value (str or float): The value to validate.
             field_name (str): The name of the field being validated.
 
         Returns:
             str or None: The error message if validation fails, None otherwise.
         """
-        try:
-            value = int(value)
-            if value > self.threshold:
-                return self.message.format_map(
-                    defaultdict(
-                        str,
-                        field_name=field_name,
-                        value=value,
-                        threshold=self.threshold,
-                    )
-                )
-        except ValueError:
-            return "field {} should be number and less then or equal {}".format(
-                field_name, self.threshold
+        error_message = self.message.format_map(
+            defaultdict(
+                str,
+                field_name=field_name,
+                value=value,
+                threshold=self.threshold,
             )
+        )
+        try:
+            value = float(value)
+            if value > self.threshold:
+                return error_message
+        except ValueError:
+            return error_message
 
 
 class LessThen:
@@ -159,44 +156,43 @@ class LessThen:
     Validator to check if a value is less than a specified threshold.
 
     Attributes:
-        threshold (int): The threshold value that the input value must exceed.
+        threshold (float): The threshold value that the input value must exceed.
         message (str): The error message to be used if the validation fails.
     """
 
     def __init__(
         self,
-        threshold: int,
-        message="field {field_name} should be less then {threshold}",
+        threshold: float,
+        message="field {field_name} must be number and less then {threshold}",
     ):
         self.threshold = threshold
         self.message = message
 
-    def validate(self, value: int, field_name: str):
+    def validate(self, value: float, field_name: str):
         """
         Validate if the given value is less than the threshold.
 
         Parameters:
-            value (str or int): The value to validate.
+            value (str or float): The value to validate.
             field_name (str): The name of the field being validated.
 
         Returns:
             str or None: The error message if validation fails, None otherwise.
         """
-        try:
-            value = int(value)
-            if value >= self.threshold:
-                return self.message.format_map(
-                    defaultdict(
-                        str,
-                        field_name=field_name,
-                        value=value,
-                        threshold=self.threshold,
-                    )
-                )
-        except ValueError:
-            return "field {} should be number and less then {}".format(
-                field_name, self.threshold
+        error_message = self.message.format_map(
+            defaultdict(
+                str,
+                field_name=field_name,
+                value=value,
+                threshold=self.threshold,
             )
+        )
+        try:
+            value = float(value)
+            if value >= self.threshold:
+                return error_message
+        except ValueError:
+            return error_message
 
 
 Gte = GreaterThenOrEqual
@@ -217,8 +213,8 @@ class NumberRange:
     Validate to check if a value is has number between min and max
 
     Attributes:
-        min (int): The minimum number allowed.
-        max (int): The maximum number allowed.
+        min (int|float): The minimum number allowed.
+        max (int|float): The maximum number allowed.
         message (str): The error message to be used if the validation fails.
     """
 
@@ -226,7 +222,7 @@ class NumberRange:
         self,
         min,
         max,
-        message="The number {field_name} should range from {min} to {max}",
+        message="field {field_name} must be between from {min} and {max}",
     ):
         self.min = min
         self.max = max
@@ -236,17 +232,18 @@ class NumberRange:
         """
         Validate if the given value is numeric and contains the specified number of decimal places.
         """
-        if value is None:
-            return None
         error_message = self.message.format_map(
-                defaultdict(str, field_name=field_name, min=self.min, max=self.max,value=value)
+            defaultdict(
+                str, field_name=field_name, min=self.min, max=self.max, value=value
             )
+        )
         try:
-            value = int(value)
+            value = float(value)
             if value < self.min or value > self.max:
                 return error_message
         except ValueError:
             return error_message
+
 
 class DecimalRange:
     """
@@ -262,7 +259,7 @@ class DecimalRange:
         self,
         min,
         max,
-        message="The decimal {field_name} should range from {min} to {max}",
+        message="The decimal {field_name} must range from {min} to {max}",
     ):
         self.min = min
         self.max = max
@@ -279,8 +276,6 @@ class DecimalRange:
         Returns:
             str or None: The error message if validation fails, None otherwise.
         """
-        if value is None:
-            return None
 
         value = str(value)
         pattern = r"^-?\d+(\.\d{{{min},{max}}})?$".format(min=self.min, max=self.max)
@@ -294,10 +289,13 @@ class DecimalRange:
 class DigitsBetween:
     """
     Validator to check if a value has a length between a specified minimum and maximum.
+    Check by: if length < min or length > max will return error
 
     Attributes:
         min (int): The minimum length that the value must have.
         max (int): The maximum length that the value must have.
+        digit_include (bool): Include digit or not when calculate length (default: True).
+        dot_include (bool): Include dot or not when calculate length (default: False).
         message (str): The error message to be used if the validation fails.
     """
 
@@ -305,10 +303,14 @@ class DigitsBetween:
         self,
         min: int,
         max: int,
-        message="{field_name} must have a length between {min} and {max}",
+        digit_include: bool = True,
+        dot_include: bool = False,
+        message="field {field_name} must have a length between {min} and {max}",
     ):
         self.min = min
         self.max = max
+        self.dot_include = dot_include
+        self.digit_include = digit_include
         self.message = message
 
     def validate(self, value, field_name):
@@ -322,10 +324,13 @@ class DigitsBetween:
         Returns:
             str or None: The error message if validation fails, None otherwise.
         """
-        if value is None:
-            return None
+        value = str(value)
+        if not self.digit_include:
+            value = value.split(".")[0]
+        if not self.dot_include:
+            value = value.replace(".", "")
 
-        length = len(str(value))
+        length = len(value)
         if length < self.min or length > self.max:
             return self.message.format_map(
                 defaultdict(str, field_name=field_name, min=self.min, max=self.max)
