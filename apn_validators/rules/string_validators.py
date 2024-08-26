@@ -15,7 +15,7 @@ class Length:
         self,
         min: int,
         max: int,
-        message="{field_name} length should be between {min} and {max}",
+        message="field {field_name} length must be between {min} and {max}",
     ):
         self.min_length = min
         self.max_length = max
@@ -52,7 +52,7 @@ class MinLength:
     """
 
     def __init__(
-        self, min: int, message="{field_name} must have a minimum length of {min}"
+        self, min: int, message="field {field_name} must have a minimum length of {min}"
     ):
         self.min = min
         self.message = message
@@ -89,7 +89,7 @@ class MaxLength:
     """
 
     def __init__(
-        self, max: int, message="{field_name} must have a maximum length of {max}"
+        self, max: int, message="field {field_name} must have a maximum length of {max}"
     ):
         self.max = max
         self.message = message
@@ -124,7 +124,7 @@ class NotBlank:
         message (str): The error message to be used if the validation fails.
     """
 
-    def __init__(self, message="{field_name} should not be blank"):
+    def __init__(self, message="field {field_name} must not be blank"):
         self.message = message
 
     def validate(self, value: str, field_name: str):
@@ -154,10 +154,10 @@ class InList:
 
     def __init__(
         self,
-        valid_values: list,
-        message="field {field_name} should be in {valid_values}",
+        data: list,
+        message="field {field_name} must be in {data}",
     ):
-        self.valid_values = valid_values
+        self.data = list(map(str, data))
         self.message = message
 
     def validate(self, value: str, field_name: str):
@@ -171,9 +171,10 @@ class InList:
         Returns:
             str or None: The error message if validation fails, None otherwise.
         """
-        if value not in self.valid_values:
+        value = str(value)
+        if value not in self.data:
             return self.message.format_map(
-                defaultdict(str, field_name=field_name, valid_values=self.valid_values)
+                defaultdict(str, field_name=field_name, data=self.data)
             )
         return None
 
@@ -187,10 +188,8 @@ class NotInList:
         message (str): The error message template if validation fails.
     """
 
-    def __init__(
-        self, list_data: list, message="{field_name} should not be in {list_data}"
-    ):
-        self.list_data = list_data
+    def __init__(self, data: list, message="field {field_name} must not be in {data}"):
+        self.data = data
         self.message = message
 
     def validate(self, value: str, field_name: str):
@@ -204,9 +203,9 @@ class NotInList:
         Returns:
             str or None: The error message if validation fails, None otherwise.
         """
-        if value in self.list_data:
+        if value in self.data:
             return self.message.format_map(
-                defaultdict(str, field_name=field_name, list_data=self.list_data)
+                defaultdict(str, field_name=field_name, data=self.data)
             )
         return None
 
@@ -223,7 +222,7 @@ class DoesntStartWith:
     def __init__(
         self,
         list_prefix: list[str],
-        message="{field_name} should not start with any of {list_prefix}",
+        message="field {field_name} must not be start with {list_prefix}",
     ):
         self.list_prefix = list_prefix
         self.message = message
@@ -239,13 +238,15 @@ class DoesntStartWith:
         Returns:
             str or None: The error message if validation fails, None otherwise.
         """
-        for prefix in self.list_prefix:
-            if value.startswith(prefix):
-                return self.message.format_map(
-                    defaultdict(
-                        str, field_name=field_name, list_prefix=self.list_prefix
-                    )
-                )
+        value = str(value)
+        if isinstance(self.list_prefix, tuple):
+            list_prefix = tuple(map(str, self.list_prefix))
+        else:
+            list_prefix = str(self.list_prefix)
+        if value.startswith(list_prefix):
+            return self.message.format_map(
+                defaultdict(str, field_name=field_name, list_prefix=self.list_prefix)
+            )
         return None
 
 
@@ -261,7 +262,7 @@ class StartWith:
     def __init__(
         self,
         list_prefix: tuple[str],
-        message="{field_name} should start with one of {list_prefix}",
+        message="field {field_name} must be start with {list_prefix}",
     ):
         self.list_prefix = list_prefix
         self.message = message
@@ -277,7 +278,12 @@ class StartWith:
         Returns:
             str or None: The error message if validation fails, None otherwise.
         """
-        if not value.startswith(self.list_prefix):
+        value = str(value)
+        if isinstance(self.list_prefix, tuple):
+            list_prefix = tuple(map(str, self.list_prefix))
+        else:
+            list_prefix = str(self.list_prefix)
+        if not value.startswith(list_prefix):
             return self.message.format_map(
                 defaultdict(str, field_name=field_name, list_prefix=self.list_prefix)
             )
@@ -296,7 +302,7 @@ class DoesntEndWith:
     def __init__(
         self,
         list_tail: tuple[str],
-        message="{field_name} should not end with any of {list_tail}",
+        message="field {field_name} must not be end with {list_tail}",
     ):
         self.list_tail = list_tail
         self.message = message
@@ -312,7 +318,13 @@ class DoesntEndWith:
         Returns:
             str or None: The error message if validation fails, None otherwise.
         """
-        if value.endswith(self.list_tail):
+        value = str(value)
+        if isinstance(self.list_tail, tuple):
+            list_tail = tuple(map(str, self.list_tail))
+        else:
+            list_tail = str(self.list_tail)
+
+        if value.endswith(list_tail):
             return self.message.format_map(
                 defaultdict(
                     str, field_name=field_name, value=value, list_tail=self.list_tail
@@ -333,7 +345,7 @@ class EndWith:
     def __init__(
         self,
         list_tail: tuple[str],
-        message="{field_name} should end with one of {list_tail}",
+        message="field {field_name} must be end with {list_tail}",
     ):
         self.list_tail = list_tail
         self.message = message
@@ -349,7 +361,13 @@ class EndWith:
         Returns:
             str or None: The error message if validation fails, None otherwise.
         """
-        if not value.endswith(self.list_tail):
+        value = str(value)
+        if isinstance(self.list_tail, tuple):
+            list_tail = tuple(map(str, self.list_tail))
+        else:
+            list_tail = str(self.list_tail)
+
+        if not value.endswith(list_tail):
             return self.message.format_map(
                 defaultdict(
                     str, field_name=field_name, value=value, list_tail=self.list_tail
