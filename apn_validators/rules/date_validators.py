@@ -5,15 +5,42 @@ from collections import defaultdict
 class IsDate:
     """must be a valid date"""
 
-    def __init__(self, message="{field_name} is not a valid date"):
+    def __init__(
+        self, date_format="%Y-%m-%d", message="field {field_name} is not a valid date"
+    ):
         self.message = message
+        self.date_format = date_format
 
-    def validate(self, str_format: str, value, field_name):
+    def validate(self, value, field_name):
         try:
-            datetime.datetime.strptime(value, str_format)
+            datetime.datetime.strptime(value, self.date_format)
         except Exception:
             return self.message.format_map(
-                defaultdict(str, field_name=field_name, str_format=str_format)
+                defaultdict(str, field_name=field_name, date_format=self.date_format)
+            )
+
+
+class DateFormat:
+    """Validate that the provided value matches the specified date format. is an alias from IsDate"""
+
+    def __init__(
+        self,
+        str_format="%Y-%m-%d",
+        message="{field_name} does not match the specified date format: {str_format}",
+    ):
+        self.str_format = str_format
+        self.message = message
+
+    def validate(self, value, field_name):
+        try:
+            datetime.datetime.strptime(value, self.str_format)
+        except ValueError:
+            return self.message.format_map(
+                defaultdict(
+                    str,
+                    field_name=field_name,
+                    value=value,
+                )
             )
 
 
@@ -21,19 +48,26 @@ class DateEquals:
     """Validate that the provided date value is equal to the target date."""
 
     def __init__(
-        self, target_date: datetime.date, message="Invalid date format: {value}"
+        self,
+        target_date: datetime.date,
+        date_format="%Y-%m-%d",
+        message="field {field_name} must be equal to {target_date}",
     ) -> None:
         self.message = message
-        self.target_date = target_date
+        self.target_date = (
+            target_date.date()
+            if isinstance(target_date, datetime.datetime)
+            else target_date
+        )
+        self.date_format = date_format
 
     def validate(self, value, field_name):
         try:
             if isinstance(value, datetime.date):
-                value = value.strftime("%Y-%m-%d")
-            parsed_date = datetime.datetime.strptime(value, "%Y-%m-%d").date()
+                value = value.strftime(self.date_format)
+            parsed_date = datetime.datetime.strptime(value, self.date_format).date()
         except ValueError:
             return "Invalid date format: {}".format(value)
-
         if parsed_date != self.target_date:
             return self.message.format_map(
                 defaultdict(
@@ -41,6 +75,7 @@ class DateEquals:
                     field_name=field_name,
                     target_date=self.target_date,
                     value=value,
+                    date_format=self.date_format,
                 )
             )
 
@@ -49,14 +84,22 @@ class DateAfter:
     """Validate that the provided date value is after the target date."""
 
     def __init__(
-        self, target_date, message="{d[field_name]} must be after {d[target_date]}"
+        self,
+        target_date: datetime.date,
+        date_format="%Y-%m-%d",
+        message="field {field_name} must be after {target_date}",
     ):
-        self.target_date = target_date
+        self.target_date = (
+            target_date.date()
+            if isinstance(target_date, datetime.datetime)
+            else target_date
+        )
+        self.date_format = date_format
         self.message = message
 
     def validate(self, value, field_name):
         try:
-            parsed_date = datetime.datetime.strptime(value, "%Y-%m-%d").date()
+            parsed_date = datetime.datetime.strptime(value, self.date_format).date()
         except ValueError:
             return "Invalid date format: {}".format(value)
 
@@ -75,14 +118,22 @@ class DateBefore:
     """Validate that the provided date value is before the target date."""
 
     def __init__(
-        self, target_date, message="{d[field_name]} must be before {d[target_date]}"
+        self,
+        target_date: datetime.date,
+        date_format="%Y-%m-%d",
+        message="field {field_name} must be before {target_date}",
     ):
-        self.target_date = target_date
+        self.target_date = (
+            target_date.date()
+            if isinstance(target_date, datetime.datetime)
+            else target_date
+        )
+        self.date_format = date_format
         self.message = message
 
     def validate(self, value, field_name):
         try:
-            parsed_date = datetime.datetime.strptime(value, "%Y-%m-%d").date()
+            parsed_date = datetime.datetime.strptime(value, self.date_format).date()
         except ValueError:
             return "Invalid date format: {}".format(value)
 
@@ -92,30 +143,6 @@ class DateBefore:
                     str,
                     field_name=field_name,
                     target_date=self.target_date,
-                    value=value,
-                )
-            )
-
-
-class DateFormat:
-    """Validate that the provided value matches the specified date format."""
-
-    def __init__(
-        self,
-        str_format="%Y-%m-%d",
-        message="{field_name} does not match the specified date format: {d[str_format]}",
-    ):
-        self.str_format = str_format
-        self.message = message
-
-    def validate(self, value, field_name):
-        try:
-            datetime.datetime.strptime(value, self.str_format)
-        except ValueError:
-            return self.message.format_map(
-                defaultdict(
-                    str,
-                    field_name=field_name,
                     value=value,
                 )
             )
