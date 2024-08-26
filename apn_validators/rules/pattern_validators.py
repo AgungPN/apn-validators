@@ -169,11 +169,25 @@ class Email:
         self.message = message
 
     def validate(self, value, field_name):
-        pattern = r"[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+"
-        if not re.match(pattern, value):
+        if not isinstance(value, str):
+            return self.message.format(field_name=field_name)
+
+            # Define a regex pattern that matches valid email addresses
+        email_regex = re.compile(
+            r"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\""
+            r"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*\")"
+            r"@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])"
+            r"?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}"
+            r"(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:"
+            r"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])"
+        )
+
+        if not email_regex.match(value):
             return self.message.format_map(
                 defaultdict(str, field_name=field_name, value=value)
             )
+
+        return None
 
 
 # # TODO
