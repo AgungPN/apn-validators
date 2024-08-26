@@ -6,7 +6,7 @@ class AllowedFile:
     Validate that a file has a valid extension.
 
     Parameters:
-        allowed_extensions (set, optional): A set of allowed file extensions in lowercase (default: {"png", "jpg", "jpeg"}).
+        allowed_extensions (list, optional): A set of allowed file extensions in lowercase (default: {"png", "jpg", "jpeg"}).
     """
 
     def __init__(
@@ -14,7 +14,7 @@ class AllowedFile:
         allowed_extensions=None,
         message="{field_name} only accepts {allowed_extensions}",
     ):
-        self.allowed_extensions = allowed_extensions or {"png", "jpg", "jpeg"}
+        self.allowed_extensions = allowed_extensions or ("png", "jpg", "jpeg")
         self.message = message
 
     def validate(self, file_name, field_name):
