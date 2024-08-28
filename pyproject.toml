@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "apn-validators"
+version = "0.4.0"
+description = "Tools for validating user data and input in Python."
+readme = "README.md"
+authors = [
+    { name = "Agung PN", email = "agungpndevs@gmail.com" }
+]
+license = { file = "LICENSE" }
+requires-python = ">=3.6"
+keywords = [
+    "validation", "validators", "python-validator", 
+    "input-validation", "data-validation", "pypi"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed"
+]
+
+dependencies = [
+    # Add dependencies here, if any
+]
+
+[project.urls]
+"Repository" = "https://github.com/AgungPN/apn-validators"
+"Documentation" = "https://github.com/AgungPN/apn-validators#readme"
+"Bug Tracker" = "https://github.com/AgungPN/apn-validators/issues"
+"Changelog" = "https://github.com/AgungPN/apn-validators/releases"
