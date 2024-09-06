@@ -1,0 +1,22 @@
+/* Background and Foreground */
+:root {
+  --md-code-fg-color: #d6deeb;
+  --md-code-bg-color: #011627;
+  --md-code-hl-color: rgba(255, 255, 255, 0.1); /* Highlight background */
+}
+
+/* Syntax Highlighting */
+:root {
+  --md-code-hl-number-color: #F78C6C;      /* Numbers */
+  --md-code-hl-special-color: #c792ea;     /* Keywords */
+  --md-code-hl-function-color: #82AAFF;    /* Functions */
+  --md-code-hl-constant-color: #FFCB6B;    /* Constants */
+  --md-code-hl-keyword-color: #c792ea;     /* Keywords */
+  --md-code-hl-string-color: #ecc48d;      /* Strings */
+  --md-code-hl-name-color: #addb67;        /* Variables */
+  --md-code-hl-operator-color: #89DDFF;    /* Operators */
+  --md-code-hl-punctuation-color: #89DDFF; /* Punctuation */
+  --md-code-hl-comment-color: #637777;     /* Comments */
+  --md-code-hl-generic-color: #d6deeb;     /* Generic Text */
+  --md-code-hl-variable-color: #addb67;    /* Variables */
+}
