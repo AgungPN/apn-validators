@@ -263,12 +263,12 @@ def test_number_range(value, kargs, expected):
         (3.14, {"min": 1, "max": 3}, None),
         (
             3.14,
-            {"min": 4, "max": 4, "digit_include": True, "dot_include": True},
+            {"min": 4, "max": 4, "decimal_include": True, "dot_include": True},
             None,
         ),
         (
             3.14,
-            {"min": 1, "max": 2, "digit_include": True},
+            {"min": 1, "max": 2, "decimal_include": True},
             "field data must have a length between 1 and 2",
         ),
     ],

@@ -15,9 +15,9 @@ from apn_validators.rules.file_validators import *
         ("", {}, None),
     ],
 )
-def test_allowed_file(value, kargs, expected):
-    assert AllowedFile(**kargs).validate(value, "file") == expected
-    _, err = validate({"file": [AllowedFile(**kargs)]}, {"file": value}, True)
+def test_allowed_extensions(value, kargs, expected):
+    assert AllowedExtensions(**kargs).validate(value, "file") == expected
+    _, err = validate({"file": [AllowedExtensions(**kargs)]}, {"file": value}, True)
     if expected is None:
         assert err == []
     else:

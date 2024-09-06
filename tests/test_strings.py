@@ -97,15 +97,15 @@ def test_not_blank(value, kargs, expected):
 @pytest.mark.parametrize(
     "value,kargs,expected",
     [
-        ("hello", {"data": ["hello", "world"]}, None),
-        ("world", {"data": ["hello", "world"]}, None),
-        (1, {"data": [1, 2, 3]}, None),
-        (1, {"data": [1]}, None),
-        (1, {"data": ["1"]}, None),
-        ("1", {"data": [1]}, None),
+        ("hello", {"valid_values": ["hello", "world"]}, None),
+        ("world", {"valid_values": ["hello", "world"]}, None),
+        (1, {"valid_values": [1, 2, 3]}, None),
+        (1, {"valid_values": [1]}, None),
+        (1, {"valid_values": ["1"]}, None),
+        ("1", {"valid_values": [1]}, None),
         (
             "",
-            {"data": ["hello", "world"]},
+            {"valid_values": ["hello", "world"]},
             "field data must be in ['hello', 'world']",
         ),
     ],
@@ -124,20 +124,20 @@ def test_in_list(value, kargs, expected):
 @pytest.mark.parametrize(
     "value,kargs,expected",
     [
-        ("hey", {"data": ["hello", "world"]}, None),
+        ("hey", {"invalid_values": ["hello", "world"]}, None),
         (
             "WORLD",
-            {"data": ["hello", "world"]},
+            {"invalid_values": ["hello", "world"]},
             None,
         ),  # TODO: add new options to make case insensitive
-        (4, {"data": [1, 2, 3]}, None),
-        (4, {"data": [1]}, None),
-        (4, {"data": ["44"]}, None),
-        ("1", {"data": [44]}, None),
-        ("", {"data": ["hello", "world"]}, None),
+        (4, {"invalid_values": [1, 2, 3]}, None),
+        (4, {"invalid_values": [1]}, None),
+        (4, {"invalid_values": ["44"]}, None),
+        ("1", {"invalid_values": [44]}, None),
+        ("", {"invalid_values": ["hello", "world"]}, None),
         (
             "hello",
-            {"data": ["hello", "world"]},
+            {"invalid_values": ["hello", "world"]},
             "field data must not be in ['hello', 'world']",
         ),
     ],
@@ -179,9 +179,9 @@ def test_not_in_list(value, kargs, expected):
 )
 def test_doesnt_start_with(value, kargs, expected):
     # single validation
-    assert DoesntStartWith(**kargs).validate(value, "data") == expected
+    assert DoesntStartsWith(**kargs).validate(value, "data") == expected
     # multi validations
-    _, err = validate({"data": [DoesntStartWith(**kargs)]}, {"data": value}, True)
+    _, err = validate({"data": [DoesntStartsWith(**kargs)]}, {"data": value}, True)
     if expected is None:
         assert err == []
     else:
@@ -219,9 +219,9 @@ def test_doesnt_start_with(value, kargs, expected):
 )
 def test_start_with(value, kargs, expected):
     # single validation
-    assert StartWith(**kargs).validate(value, "data") == expected
+    assert StartsWith(**kargs).validate(value, "data") == expected
     # multi validations
-    _, err = validate({"data": [StartWith(**kargs)]}, {"data": value}, True)
+    _, err = validate({"data": [StartsWith(**kargs)]}, {"data": value}, True)
     if expected is None:
         assert err == []
     else:
@@ -254,9 +254,9 @@ def test_start_with(value, kargs, expected):
 )
 def test_doesnt_ends_with(value, kargs, expected):
     # single validation
-    assert DoesntEndWith(**kargs).validate(value, "data") == expected
+    assert DoesntEndsWith(**kargs).validate(value, "data") == expected
     # multi validations
-    _, err = validate({"data": [DoesntEndWith(**kargs)]}, {"data": value}, True)
+    _, err = validate({"data": [DoesntEndsWith(**kargs)]}, {"data": value}, True)
     if expected is None:
         assert err == []
     else:
@@ -294,9 +294,9 @@ def test_doesnt_ends_with(value, kargs, expected):
 )
 def test_ends_with(value, kargs, expected):
     # single validation
-    assert EndWith(**kargs).validate(value, "data") == expected
+    assert EndsWith(**kargs).validate(value, "data") == expected
     # multi validations
-    _, err = validate({"data": [EndWith(**kargs)]}, {"data": value}, True)
+    _, err = validate({"data": [EndsWith(**kargs)]}, {"data": value}, True)
     if expected is None:
         assert err == []
     else:

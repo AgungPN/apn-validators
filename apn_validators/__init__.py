@@ -40,7 +40,10 @@ def validate(schema: dict, values: dict, is_err_to_list=False):
     Returns:
         tuple: A tuple containing two dictionaries:
             - validated (dict): A dictionary of the validated field names and their corresponding values.
-            - errors (dict): A dictionary where keys are field names and values are lists of error messages for each field.
+            - errors (dict | list | None): A 
+                - If is_err_to_list is True, errors will be a list of all error messages.
+                - If is_err_to_list is False, errors will be a dictionary where keys are field names and values are lists of error messages for each field.
+                - If there are no errors, errors will be an empty dictionary.
 
     Example:
         schema = {
