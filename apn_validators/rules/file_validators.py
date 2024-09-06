@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 
-class AllowedFile:
+class AllowedExtensions:
     """
     Validate that a file has a valid extension.
 
@@ -49,7 +49,7 @@ class AllowedFile:
 
 
 if __name__ == "__main__":
-    print(AllowedFile().validate("1.png", "file"))
-    print(AllowedFile().validate("1.docs", "file"))
-    print(AllowedFile().validate("1docs", "file"))
-    print(AllowedFile().validate("", "file"))
+    print(AllowedExtensions().validate("1.png", "file"))
+    print(AllowedExtensions().validate("1.docs", "file"))
+    print(AllowedExtensions().validate("1docs", "file"))
+    print(AllowedExtensions().validate("", "file"))
