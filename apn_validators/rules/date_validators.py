@@ -3,7 +3,13 @@ from collections import defaultdict
 
 
 class IsDate:
-    """must be a valid date"""
+    """
+    must be a valid date
+
+    Parameters:
+        date_format: (str,optional) the date format to validate the date against (default: %Y-%m-%d)
+        message: (str,optional) the error message to return if the validation fails
+    """
 
     def __init__(
         self, date_format="%Y-%m-%d", message="field {field_name} is not a valid date"
@@ -14,38 +20,26 @@ class IsDate:
     def validate(self, value, field_name):
         try:
             datetime.datetime.strptime(value, self.date_format)
-        except Exception:
-            return self.message.format_map(
-                defaultdict(str, field_name=field_name, date_format=self.date_format)
-            )
-
-
-class DateFormat:
-    """Validate that the provided value matches the specified date format. is an alias from IsDate"""
-
-    def __init__(
-        self,
-        str_format="%Y-%m-%d",
-        message="{field_name} does not match the specified date format: {str_format}",
-    ):
-        self.str_format = str_format
-        self.message = message
-
-    def validate(self, value, field_name):
-        try:
-            datetime.datetime.strptime(value, self.str_format)
         except ValueError:
             return self.message.format_map(
                 defaultdict(
                     str,
                     field_name=field_name,
+                    date_format=self.date_format,
                     value=value,
                 )
             )
 
 
 class DateEquals:
-    """Validate that the provided date value is equal to the target date."""
+    """
+    Validate that the provided date value is equal to the target date.
+
+    Parameters:
+        target_date: (datetime.date) the date to compare against
+        date_format: (str,optional) the date format to validate the date against (default: %Y-%m-%d)
+        message: (str,optional) the error message to return if the validation fails
+    """
 
     def __init__(
         self,
@@ -81,7 +75,14 @@ class DateEquals:
 
 
 class DateAfter:
-    """Validate that the provided date value is after the target date."""
+    """
+    Validate that the provided date value is after the target date.
+
+    Parameters:
+        target_date: (datetime.date) the date to compare against
+        date_format: (str,optional) the date format to validate the date against (default: %Y-%m-%d)
+        message: (str,optional) the error message to return if the validation
+    """
 
     def __init__(
         self,
@@ -115,7 +116,13 @@ class DateAfter:
 
 
 class DateBefore:
-    """Validate that the provided date value is before the target date."""
+    """
+    Validate that the provided date value is before the target date.
+    Parameters:
+        target_date: (datetime.date) the date to compare against
+        date_format: (str,optional) the date format to validate the date against (default: %Y-%m-%d)
+        message: (str,optional) the error message to return if the validation
+    """
 
     def __init__(
         self,
