@@ -154,10 +154,10 @@ class InList:
 
     def __init__(
         self,
-        data: list,
-        message="field {field_name} must be in {data}",
+        valid_values: list,
+        message="field {field_name} must be in {valid_values}",
     ):
-        self.data = list(map(str, data))
+        self.valid_values = list(map(str, valid_values))
         self.message = message
 
     def validate(self, value: str, field_name: str):
@@ -172,9 +172,9 @@ class InList:
             str or None: The error message if validation fails, None otherwise.
         """
         value = str(value)
-        if value not in self.data:
+        if value not in self.valid_values:
             return self.message.format_map(
-                defaultdict(str, field_name=field_name, data=self.data)
+                defaultdict(str, field_name=field_name, valid_values=self.valid_values)
             )
         return None
 
@@ -184,12 +184,12 @@ class NotInList:
     Validate that a string value is not present in a specified list.
 
     Attributes:
-        list_data (list): The list of invalid values.
+        invalid_values (list): The list of invalid values.
         message (str): The error message template if validation fails.
     """
 
-    def __init__(self, data: list, message="field {field_name} must not be in {data}"):
-        self.data = data
+    def __init__(self, invalid_values: list, message="field {field_name} must not be in {invalid_values}"):
+        self.invalid_values = invalid_values
         self.message = message
 
     def validate(self, value: str, field_name: str):
@@ -203,14 +203,13 @@ class NotInList:
         Returns:
             str or None: The error message if validation fails, None otherwise.
         """
-        if value in self.data:
+        if value in self.invalid_values:
             return self.message.format_map(
-                defaultdict(str, field_name=field_name, data=self.data)
+                defaultdict(str, field_name=field_name, invalid_values=self.invalid_values)
             )
         return None
 
-
-class DoesntStartWith:
+class DoesntStartsWith:
     """
     Validate that a string value does not start with any of the specified prefixes.
 
@@ -250,7 +249,7 @@ class DoesntStartWith:
         return None
 
 
-class StartWith:
+class StartsWith:
     """
     Validate that a string value starts with one of the specified prefixes.
 
@@ -290,7 +289,7 @@ class StartWith:
         return None
 
 
-class DoesntEndWith:
+class DoesntEndsWith:
     """
     Validate that a string value does not end with any of the specified suffixes.
 
@@ -333,7 +332,7 @@ class DoesntEndWith:
         return None
 
 
-class EndWith:
+class EndsWith:
     """
     Validate that a string value ends with one of the specified suffixes.
 
@@ -449,8 +448,9 @@ class NotEquals:
                 defaultdict(
                     str,
                     field_name=field_name,
-                    value=value,
-                    another_value=self.another_value,
+                    value=value, another_value=self.another_value,
                 )
             )
         return None
+
+# TODO: add Same rule

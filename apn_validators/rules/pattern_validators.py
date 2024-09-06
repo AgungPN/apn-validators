@@ -8,7 +8,7 @@ class MatchRegex:
 
     Attributes:
         pattern (str): The regular expression pattern to match against.
-        message (str): The error message to be used if the validation fails.
+        message (str,optional): The error message to be used if the validation fails.
     """
 
     def __init__(
@@ -43,7 +43,7 @@ class NotMatchRegex:
 
     Attributes:
         pattern (str): The regular expression pattern to check against.
-        message (str): The error message to be used if the validation fails.
+        message (str,optional): The error message to be used if the validation fails.
     """
 
     def __init__(
@@ -82,6 +82,7 @@ class Password:
         numbers (bool, optional): Whether the password must contain numeric digits (default: True).
         symbols (bool, optional): Whether the password must contain symbols (default: True).
         length (int, optional): The minimum length of the password (default: 8).
+        messages (dict[str,str],optional): custom error message
     """
 
     def __init__(
@@ -154,13 +155,6 @@ class Password:
 class Email:
     """
     Validate that a string value is a valid email address.
-
-    Parameters:
-        value (str, optional): The string value to validate. If None, it will be retrieved from the data by the setter before validation (default: None).
-        field_name (str, optional): The name of the field being validated. If None, it will be retrieved from the data by the setter before validation (default: None).
-
-    Returns:
-        None
     """
 
     def __init__(
@@ -169,6 +163,15 @@ class Email:
         self.message = message
 
     def validate(self, value, field_name):
+        """
+        Parameters:
+            value (str, optional): The string value to validate. If None, it will be retrieved from the data by the setter before validation (default: None).
+            field_name (str, optional): The name of the field being validated. If None, it will be retrieved from the data by the setter before validation (default: None).
+
+        Returns:
+            None
+        """
+
         if not isinstance(value, str):
             return self.message.format(field_name=field_name)
 
