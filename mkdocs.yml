@@ -1,0 +1,49 @@
+site_name: APN Validators
+site_url: https://agungpn.github.io/apn-validators
+repo_url: https://github.com/agungpn/apn-validators
+repo_name: agungpn/apn-validators
+edit_uri: "edit/main/docs/"
+theme:
+  icon:
+    logo: fontawesome/solid/shield-heart
+    repo: fontawesome/brands/github
+    edit: material/pencil 
+    view: material/eye
+    admonition:
+      example: material/code-json
+  name: 'material'
+  custom_dir: 'docs/stylesheets'
+  features:
+    # - search.highlight
+    - content.action.edit
+    - navigation.instant
+  palette:
+    primary: black
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+extra_css:
+  - stylesheets/custom-theme.css
+plugins:
+  - git-revision-date-localized:
+      enable_creation_date: false
+      enable_edition_date: false
+  - search
+  # - mkdocstrings:
+  #     handlers:
+  #       python:
+  #         options:
+  #           show_root_heading: true
+  #         import:
+  #           - https://docs.python-requests.org/en/master/objects.inv
+  - mike
+extra:
+  version:
+    provider: mike
