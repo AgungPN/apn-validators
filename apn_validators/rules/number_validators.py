@@ -294,7 +294,7 @@ class DigitsBetween:
     Attributes:
         min (int): The minimum length that the value must have.
         max (int): The maximum length that the value must have.
-        digit_include (bool): Include digit or not when calculate length (default: True).
+        decimal_include (bool): Include decimal or not when calculate length (default: True).
         dot_include (bool): Include dot or not when calculate length (default: False).
         message (str): The error message to be used if the validation fails.
     """
@@ -303,14 +303,14 @@ class DigitsBetween:
         self,
         min: int,
         max: int,
-        digit_include: bool = True,
+        decimal_include: bool = True,
         dot_include: bool = False,
         message="field {field_name} must have a length between {min} and {max}",
     ):
         self.min = min
         self.max = max
         self.dot_include = dot_include
-        self.digit_include = digit_include
+        self.decimal_include = decimal_include
         self.message = message
 
     def validate(self, value, field_name):
@@ -325,7 +325,7 @@ class DigitsBetween:
             str or None: The error message if validation fails, None otherwise.
         """
         value = str(value)
-        if not self.digit_include:
+        if not self.decimal_include:
             value = value.split(".")[0]
         if not self.dot_include:
             value = value.replace(".", "")
