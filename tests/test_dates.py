@@ -5,6 +5,10 @@ import pytest
 from apn_validators import validate
 from apn_validators.rules.date_validators import *
 
+todayDate = datetime.date.today()
+tomorrowDate = todayDate + datetime.timedelta(days=1)
+yesterdayDate = todayDate - datetime.timedelta(days=1)
+
 
 @pytest.mark.parametrize(
     "value,kargs,expected",
@@ -45,6 +49,19 @@ def test_is_date(value, kargs, expected):
             {"target_date": datetime.datetime.strptime("2024-12-12", "%Y-%m-%d")},
             "field data must be equal to 2024-12-12",
         ),
+        (
+            todayDate.strftime("%Y-%m-%d"),
+            {"target_date": "today"},
+            None,
+        ),
+        (
+            "2024/12/24",
+            {
+                "target_date": "2024/12/24",
+                "date_format": "%Y/%m/%d",
+            },
+            None,
+        ),
     ],
 )
 def test_date_equals(value, kargs, expected):
@@ -77,6 +94,19 @@ def test_date_equals(value, kargs, expected):
             {"target_date": datetime.datetime.strptime("2024-12-12", "%Y-%m-%d")},
             "field data must be after 2024-12-12",
         ),
+        (
+            tomorrowDate.strftime("%Y-%m-%d"),
+            {"target_date": "yesterday"},
+            None,
+        ),
+        (
+            "2024/12/25",
+            {
+                "target_date": "2024/12/24",
+                "date_format": "%Y/%m/%d",
+            },
+            None,
+        ),
     ],
 )
 def test_date_after(value, kargs, expected):
@@ -86,6 +116,7 @@ def test_date_after(value, kargs, expected):
         assert err == []
     else:
         assert expected in err
+
 
 @pytest.mark.parametrize(
     "value,kargs,expected",
@@ -107,6 +138,19 @@ def test_date_after(value, kargs, expected):
             "2024-12-24",
             {"target_date": datetime.datetime.strptime("2024-12-12", "%Y-%m-%d")},
             "field data must be before 2024-12-12",
+        ),
+        (
+            yesterdayDate.strftime("%Y-%m-%d"),
+            {"target_date": "tomorrow"},
+            None,
+        ),
+        (
+            "2024/12/23",
+            {
+                "target_date": "2024/12/24",
+                "date_format": "%Y/%m/%d",
+            },
+            None,
         ),
     ],
 )
